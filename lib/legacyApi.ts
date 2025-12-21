@@ -1,4 +1,3 @@
-// lib/api.ts
 import axios from "axios";
 import type { Note, CreateNotePayload } from "@/types/note";
 
@@ -18,8 +17,6 @@ const client = axios.create({
   },
 });
 
-// ---- Типи для HTTP ----
-
 export interface FetchNotesParams {
   page: number;
   perPage: number;
@@ -27,15 +24,10 @@ export interface FetchNotesParams {
   tag?: string;
 }
 
-/**
- * Відповідь API згідно з умовою: тільки notes і totalPages.
- */
 export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
 }
-
-// ---- HTTP-функції ----
 
 export async function fetchNotes(
   params: FetchNotesParams

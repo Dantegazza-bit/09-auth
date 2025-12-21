@@ -1,6 +1,6 @@
-// components/Header/Header.tsx
 import Link from "next/link";
 import css from "./Header.module.css";
+import AuthNavigation from "@/components/AuthNavigation/AuthNavigation";
 
 export default function Header() {
   return (
@@ -8,16 +8,22 @@ export default function Header() {
       <Link href="/" aria-label="Home">
         NoteHub
       </Link>
+
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
-          <li>
-            <Link href="/">Home</Link>
+          <li className={css.navigationItem}>
+            <Link href="/" className={css.navigationLink}>
+              Home
+            </Link>
           </li>
-          <li>
-            <Link href="/notes/filter/all" className={css.link}>
+
+          <li className={css.navigationItem}>
+            <Link href="/notes/filter/all" className={css.navigationLink}>
               Notes
             </Link>
           </li>
+
+          <AuthNavigation />
         </ul>
       </nav>
     </header>

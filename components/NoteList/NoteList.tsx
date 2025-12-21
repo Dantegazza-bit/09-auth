@@ -1,4 +1,3 @@
-// components/NoteList/NoteList.tsx
 "use client";
 
 import Link from "next/link";
@@ -6,16 +5,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import type { Note } from "@/types/note";
-import { deleteNote } from "@/lib/api";
+import { deleteNote } from "@/lib/api/clientApi";
 
 import css from "./NoteList.module.css";
 
 export interface NoteListProps {
   notes: Note[];
-  detailsBasePath?: string; // залишаємо, але не обов'язково використовувати
+  detailsBasePath?: string;
 }
 
-export default function NoteList({ notes }: NoteListProps) {
+export default function NoteList({
+  notes,
+  detailsBasePath = "/notes",
+}: NoteListProps) {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
@@ -41,7 +43,7 @@ export default function NoteList({ notes }: NoteListProps) {
             <span className={css.tag}>{note.tag}</span>
 
             <div>
-              <Link href={`/notes/${note.id}`} className={css.link}>
+              <Link href={`${detailsBasePath}/${note.id}`} className={css.link}>
                 View details
               </Link>
 

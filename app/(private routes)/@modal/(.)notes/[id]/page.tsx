@@ -1,17 +1,15 @@
-// app/@modal/(.)notes/[id]/page.tsx
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
 
-import { fetchNoteById } from "@/lib/api";
+import { fetchNoteById } from "@/lib/api/clientApi";
 import NotePreview from "./NotePreview.client";
 
-interface ModalNotePageProps {
-  // 🔥 ВАЖЛИВО: params — Саме Promise<{ id: string }>
+type Props = {
   params: Promise<{ id: string }>;
-}
+};
 
 async function getDehydratedState(id: string) {
   const queryClient = new QueryClient();
@@ -24,8 +22,7 @@ async function getDehydratedState(id: string) {
   return dehydrate(queryClient);
 }
 
-export default async function ModalNotePage({ params }: ModalNotePageProps) {
-  // ✅ розпаковуємо Promise
+export default async function ModalNotePage({ params }: Props) {
   const { id } = await params;
 
   const state = await getDehydratedState(id);

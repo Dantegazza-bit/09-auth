@@ -35,3 +35,18 @@
 .navigation li a:hover {
   color: #ddd;
 }
+
+.navigationItem {
+  display: flex;
+  align-items: center;
+}
+
+.navigationLink {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+}
+
+.navigationLink:hover {
+  color: #ddd;
+}

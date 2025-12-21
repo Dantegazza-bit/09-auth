@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchNotes, type FetchNotesResponse } from "@/lib/api";
+import { fetchNotes, type NotesResponse } from "@/lib/api/clientApi";
 import type { Note } from "@/types/note";
 
 import SearchBox from "@/components/SearchBox/SearchBox";
@@ -15,10 +15,11 @@ import css from "../../NotesPage.module.css";
 const PER_PAGE = 10;
 
 interface NotesClientProps {
+  initialData: NotesResponse;
   tag: string;
 }
 
-export default function NotesClient({ tag }: NotesClientProps) {
+export default function NotesClient({ initialData, tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -34,7 +35,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
     return () => window.clearTimeout(id);
   }, [search]);
 
-  const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
+  const { data, isLoading, isError } = useQuery<NotesResponse, Error>({
     queryKey: ["notes", { page, search: debouncedSearch, tag: normalizedTag }],
     queryFn: () =>
       fetchNotes({
@@ -43,6 +44,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
         search: debouncedSearch,
         tag: normalizedTag,
       }),
+    initialData: page === 1 && debouncedSearch === "" ? initialData : undefined,
     refetchOnMount: false,
   });
 
@@ -56,12 +58,11 @@ export default function NotesClient({ tag }: NotesClientProps) {
     <>
       <SearchBox value={search} onChange={setSearch} />
 
-      {/* тепер це Link на маршрут створення */}
       <Link href="/notes/action/create" className={css.button}>
         Create note +
       </Link>
 
-      <NoteList notes={notes} detailsBasePath={`/notes/filter/${tag}`} />
+      <NoteList notes={notes} />
 
       <Pagination page={page} totalPages={totalPages} onChange={setPage} />
     </>
