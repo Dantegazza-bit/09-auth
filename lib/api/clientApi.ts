@@ -1,18 +1,12 @@
-import axios from "axios";
 import type { User } from "@/types/user";
 import type { Note } from "@/types/note";
-
-// ✅ клієнтський інстанс саме для Next route handlers (/api/*)
-const client = axios.create({
-  baseURL: "", // same-origin (localhost / vercel)
-  withCredentials: true,
-});
+import { api } from "./api";
 
 // ===== Notes =====
 export interface FetchNotesParams {
   search?: string;
   page?: number;
-  perPage?: number;
+  perPage?: number; // але ми все одно будемо передавати 12
   tag?: string;
 }
 
@@ -24,14 +18,14 @@ export interface NotesResponse {
 export async function fetchNotes(
   params: FetchNotesParams
 ): Promise<NotesResponse> {
-  const { data } = await client.get<NotesResponse>("/api/notes", {
+  const { data } = await api.get<NotesResponse>("/notes", {
     params: { perPage: 12, ...params },
   });
   return data;
 }
 
 export async function fetchNoteById(id: string): Promise<Note> {
-  const { data } = await client.get<Note>(`/api/notes/${id}`);
+  const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 }
 
@@ -42,12 +36,12 @@ export interface CreateNoteRequest {
 }
 
 export async function createNote(payload: CreateNoteRequest): Promise<Note> {
-  const { data } = await client.post<Note>("/api/notes", payload);
+  const { data } = await api.post<Note>("/notes", payload);
   return data;
 }
 
 export async function deleteNote(id: string): Promise<Note> {
-  const { data } = await client.delete<Note>(`/api/notes/${id}`);
+  const { data } = await api.delete<Note>(`/notes/${id}`);
   return data;
 }
 
@@ -58,25 +52,24 @@ export interface AuthRequest {
 }
 
 export async function register(payload: AuthRequest): Promise<User> {
-  const { data } = await client.post<User>("/api/auth/register", payload);
+  const { data } = await api.post<User>("/auth/register", payload);
   return data;
 }
 
 export async function login(payload: AuthRequest): Promise<User> {
-  const { data } = await client.post<User>("/api/auth/login", payload);
+  const { data } = await api.post<User>("/auth/login", payload);
   return data;
 }
 
 export async function logout(): Promise<void> {
-  await client.post("/api/auth/logout");
+  await api.post("/auth/logout");
 }
 
 export async function checkSession(): Promise<User | null> {
   try {
-    const { data } = await client.get<{ success: boolean; user: User }>(
-      "/api/auth/session"
-    );
-    return data.success ? data.user : null;
+    const { data } = await api.get<User | null>("/auth/session");
+    // бекенд може повернути або user, або null/порожнє тіло — тут безпечно
+    return data ?? null;
   } catch {
     return null;
   }
@@ -84,7 +77,7 @@ export async function checkSession(): Promise<User | null> {
 
 // ===== Users =====
 export async function getMe(): Promise<User> {
-  const { data } = await client.get<User>("/api/users/me");
+  const { data } = await api.get<User>("/users/me");
   return data;
 }
 
@@ -93,6 +86,6 @@ export interface UpdateMeRequest {
 }
 
 export async function updateMe(payload: UpdateMeRequest): Promise<User> {
-  const { data } = await client.patch<User>("/api/users/me", payload);
+  const { data } = await api.patch<User>("/users/me", payload);
   return data;
 }

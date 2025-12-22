@@ -15,16 +15,16 @@ import css from "../../NotesPage.module.css";
 const PER_PAGE = 10;
 
 interface NotesClientProps {
-  initialData: NotesResponse;
   tag: string;
 }
 
-export default function NotesClient({ initialData, tag }: NotesClientProps) {
+export default function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const normalizedTag = tag === "all" ? undefined : tag;
+  // ✅ tag завжди рядок, НЕ undefined
+  const normalizedTag = tag === "all" ? "all" : tag;
 
   useEffect(() => {
     const id = window.setTimeout(() => {
@@ -44,8 +44,6 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
         search: debouncedSearch,
         tag: normalizedTag,
       }),
-    initialData: page === 1 && debouncedSearch === "" ? initialData : undefined,
-    refetchOnMount: false,
   });
 
   const notes: Note[] = data?.notes ?? [];

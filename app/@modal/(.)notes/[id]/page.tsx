@@ -3,8 +3,9 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
+import { cookies } from "next/headers";
 
-import { fetchNoteById } from "@/lib/api/clientApi";
+import { serverFetchNoteById } from "@/lib/api/serverApi";
 import NotePreview from "./NotePreview.client";
 
 type Props = {
@@ -12,11 +13,12 @@ type Props = {
 };
 
 async function getDehydratedState(id: string) {
+  const cookieStore = await cookies();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryFn: () => serverFetchNoteById(cookieStore, id),
   });
 
   return dehydrate(queryClient);

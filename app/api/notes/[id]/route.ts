@@ -23,9 +23,13 @@ export async function GET(request: Request, { params }: Props) {
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
+
+      // ✅ як у вимозі ментора: використовуємо error.status (а не error.response?.status)
+      const status = (error as unknown as { status?: number }).status ?? 500;
+
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.response?.status ?? 500 }
+        { status }
       );
     }
 
@@ -52,9 +56,12 @@ export async function DELETE(request: Request, { params }: Props) {
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
+
+      const status = (error as unknown as { status?: number }).status ?? 500;
+
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.response?.status ?? 500 }
+        { status }
       );
     }
 
@@ -82,9 +89,12 @@ export async function PATCH(request: Request, { params }: Props) {
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
+
+      const status = (error as unknown as { status?: number }).status ?? 500;
+
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.response?.status ?? 500 }
+        { status }
       );
     }
 

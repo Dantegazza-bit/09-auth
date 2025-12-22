@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useState } from "react";
 
 import { updateMe } from "@/lib/api/clientApi";
@@ -38,10 +39,22 @@ export default function EditProfilePage() {
     }
   };
 
+  if (!user) return null;
+
   return (
     <main className={css.mainContent}>
       <div className={css.card}>
-        <h1 className={css.title}>Edit profile</h1>
+        <h1 className={css.title}>Edit Profile</h1>
+
+        {/* ✅ Аватар через next/image */}
+        <Image
+          src={user.avatar}
+          alt="User Avatar"
+          width={120}
+          height={120}
+          className={css.avatar}
+          priority
+        />
 
         <form onSubmit={handleSubmit} className={css.form}>
           <label className={css.label}>
@@ -55,6 +68,9 @@ export default function EditProfilePage() {
               required
             />
           </label>
+
+          {/* ✅ Email тільки для читання */}
+          <p className={css.email}>Email: {user.email}</p>
 
           {error && <p className={css.error}>{error}</p>}
 

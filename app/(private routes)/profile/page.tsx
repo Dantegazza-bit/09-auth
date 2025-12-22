@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 import { serverCheckSession, serverGetMe } from "@/lib/api/serverApi";
@@ -14,8 +15,8 @@ export const metadata: Metadata = {
 export default async function ProfilePage() {
   const cookieStore = await cookies();
 
-  const isAuth = await serverCheckSession(cookieStore);
-  if (!isAuth) redirect("/sign-in");
+  const sessionRes = await serverCheckSession(cookieStore);
+  if (sessionRes.status !== 200) redirect("/sign-in");
 
   const user = await serverGetMe(cookieStore);
   if (!user) redirect("/sign-in");
@@ -25,14 +26,17 @@ export default async function ProfilePage() {
       <div className={css.profileCard}>
         <div className={css.header}>
           <h1 className={css.formTitle}>Profile Page</h1>
-          <a href="/profile/edit" className={css.editProfileButton}>
+
+          {/* ✅ Link замість <a> */}
+          <Link href="/profile/edit" className={css.editProfileButton}>
             Edit Profile
-          </a>
+          </Link>
         </div>
 
         <div className={css.avatarWrapper}>
+          {/* ✅ аватар з user.avatar */}
           <Image
-            src="/default-avatar.png"
+            src={user.avatar}
             alt="User Avatar"
             width={120}
             height={120}

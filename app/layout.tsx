@@ -1,36 +1,35 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import type { ReactNode } from "react";
 
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import AuthInit from "@/components/AuthInit/AuthInit";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
 
-import { serverCheckSession, serverGetMe } from "@/lib/api/serverApi";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "NoteHub",
   description: "NoteHub is an app for creating and managing personal notes.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
+  modal,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
+  modal: ReactNode;
 }) {
-  const cookieStore = await cookies();
-
-  const isAuth = await serverCheckSession(cookieStore);
-  const initialUser = isAuth ? await serverGetMe(cookieStore) : null;
-
   return (
     <html lang="en">
       <body>
         <TanStackProvider>
-          <AuthInit initialUser={initialUser} />
-          <Header />
-          {children}
-          <Footer />
+          <AuthProvider>
+            <Header />
+            {children}
+            {modal}
+            <Footer />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

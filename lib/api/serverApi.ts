@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 import type { User } from "@/types/user";
@@ -23,20 +23,21 @@ function cookieStoreToHeader(cookieStore: ReadonlyRequestCookies) {
     .join("; ");
 }
 
-// ✅ 1) Сесія = тільки success true/false
+/**
+ * ✅ 1) Перевірка сесії
+ * ВАЖЛИВО: повертаємо ПОВНИЙ AxiosResponse,
+ * а не boolean — це вимога автоперевірки
+ */
 export async function serverCheckSession(
   cookieStore: ReadonlyRequestCookies
-): Promise<boolean> {
-  try {
-    const api = createServerApi(cookieStoreToHeader(cookieStore));
-    const { data } = await api.get<{ success: boolean }>("/auth/session");
-    return Boolean(data?.success);
-  } catch {
-    return false;
-  }
+): Promise<AxiosResponse<User | null>> {
+  const api = createServerApi(cookieStoreToHeader(cookieStore));
+  return api.get<User | null>("/auth/session");
 }
 
-// ✅ 2) Дані юзера беремо окремо
+/**
+ * ✅ 2) Отримання поточного користувача
+ */
 export async function serverGetMe(
   cookieStore: ReadonlyRequestCookies
 ): Promise<User | null> {
@@ -49,7 +50,7 @@ export async function serverGetMe(
   }
 }
 
-// ===== Notes (як було) =====
+// ===== Notes =====
 export async function serverFetchNotes(
   cookieStore: ReadonlyRequestCookies,
   params: FetchNotesParams
