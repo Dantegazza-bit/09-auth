@@ -18,9 +18,22 @@ export interface NotesResponse {
 export async function fetchNotes(
   params: FetchNotesParams
 ): Promise<NotesResponse> {
+  const queryParams: Record<string, string | number> = {
+    perPage: 12,
+  };
+
+  if (typeof params.page === "number") queryParams.page = params.page;
+  if (params.search !== undefined) queryParams.search = params.search;
+
+  // ✅ tag додаємо тільки якщо він НЕ порожній і НЕ "all"
+  if (params.tag && params.tag !== "all") {
+    queryParams.tag = params.tag;
+  }
+
   const { data } = await api.get<NotesResponse>("/notes", {
-    params: { perPage: 12, ...params },
+    params: queryParams,
   });
+
   return data;
 }
 

@@ -24,7 +24,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // ✅ tag завжди рядок, НЕ undefined
-  const normalizedTag = tag === "all" ? "all" : tag;
+  const normalizedTag = tag === "all" ? "" : tag;
 
   useEffect(() => {
     const id = window.setTimeout(() => {

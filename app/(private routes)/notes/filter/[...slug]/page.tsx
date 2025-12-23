@@ -30,7 +30,7 @@ export default async function FilterNotesPage({ params }: Props) {
   const tag = slug?.[0] ?? "all";
 
   // ✅ tag завжди явно, НЕ undefined
-  const normalizedTag = tag === "all" ? "all" : tag;
+  const normalizedTag = tag === "all" ? "" : tag;
 
   const queryClient = new QueryClient();
 
