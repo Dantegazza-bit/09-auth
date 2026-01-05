@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Notes App with Authentication
 
-## Getting Started
+## 📌 Description
+A fullstack-style Next.js application with user authentication, protected routes, and notes management.
+The project focuses on client–server interaction, session-based authentication, and modern Next.js routing.
 
-First, run the development server:
+## 🚀 Demo
+https://09-auth-rose-three.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠 Tech Stack
+- Next.js (App Router)
+- TypeScript
+- React
+- CSS Modules
+- Axios
+- TanStack Query (React Query)
+- Zustand
+- Prettier
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔐 Authentication & Authorization
+- User registration and login
+- Session-based authentication using cookies
+- Protected (private) and public routes
+- Automatic redirects based on auth status
+- Middleware-based route protection
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ API Integration
+- Integrated with external REST API
+- Axios instance with `withCredentials`
+- Separate client-side and server-side API layers
+- Environment-based API configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 👤 My Contribution
+- Implemented authentication and authorization flow
+- Built public and private routing structure
+- Integrated API requests using Axios and TanStack Query
+- Managed auth state with Zustand
+- Implemented profile page and profile editing
+- Added middleware-based route protection
+- Configured SSR and CSR logic
+- Deployed project to Vercel
 
-## Learn More
+## 📂 Features
+- User registration and login
+- Profile page with editable username
+- Notes list with filtering and pagination
+- Modal routes
+- Server-side and client-side rendering
+- Responsive UI
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Deployment
+The project is deployed on Vercel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
